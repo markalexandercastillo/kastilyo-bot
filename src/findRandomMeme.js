@@ -16,7 +16,8 @@ function getMemeText(screenshot, captions) {
 }
 
 /**
- * Resolves to an image url based on the given search terms
+ * Resolves to an object with some data about an episode and a meme which
+ * should match the given search terms
  * @param  {Object} toonCapsClient frinkiac or morbotron API client
  * @param  {String} searchTerms
  * @return {Promise}

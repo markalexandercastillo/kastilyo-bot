@@ -6,7 +6,8 @@
   "author": "Mark Castillo <markalexandercastillo@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "nodemon": "nodemon -e js index.js"
   },
   "dependencies": {
     "debug": "^2.4.5",

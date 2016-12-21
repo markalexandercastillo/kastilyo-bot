@@ -6,13 +6,12 @@ bot.onText(
   /\/morbotron (.+)/,
   (message, [ignore, searchTerms]) =>
     findRandomMeme(morbotron, searchTerms)
-      .then(memeImageUrl => bot.sendPhoto(message.chat.id, memeImageUrl))
+      .then(({meme}) => bot.sendPhoto(message.chat.id, meme.imageUrl))
 );
-
 
 bot.onText(
   /\/frinkiac (.+)/,
   (message, [ignore, searchTerms]) =>
     findRandomMeme(frinkiac, searchTerms)
-      .then(memeImageUrl => bot.sendPhoto(message.chat.id, memeImageUrl))
+      .then(({meme}) => bot.sendPhoto(message.chat.id, meme.imageUrl))
 );

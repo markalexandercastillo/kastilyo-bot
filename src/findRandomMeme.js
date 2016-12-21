@@ -32,7 +32,15 @@ function findRandomMeme(toonCapsClient, searchTerms) {
         // determine text to use for meme
         const memeText = getMemeText(screenshot, captions);
         // construct meme url
-        return toonCapsClient.getMemeUrl(screenshot, memeText);
+        return {
+          episode: captions.epiode,
+          screenshot,
+          captions,
+          meme: {
+            text: memeText,
+            imageUrl: toonCapsClient.getMemeUrl(screenshot, memeText)
+          }
+        };
       })
     );
 }

@@ -1,0 +1,11 @@
+{
+  "name": "kastilyo-bot",
+  "version": "1.0.0",
+  "description": "Where I'm keeping the source code for my telegram bot",
+  "main": "index.js",
+  "author": "Mark Castillo <markalexandercastillo@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "toon-caps": "^1.0.0"
+  }
+}

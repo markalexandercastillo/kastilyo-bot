@@ -23,6 +23,10 @@
         ],
         "prefer-template": [
             "error"
+        ],
+        "no-unused-vars": [
+          "error",
+          { "argsIgnorePattern": "ignore" }
         ]
     }
 }

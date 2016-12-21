@@ -1,6 +1,4 @@
-const dotenv = require('dotenv');
 const _ = require('lodash');
-dotenv.load({ silent: true });
 const {morbotron, frinkiac} = require('toon-caps');
 const Rx = require('rxjs');
 const bot = require('./helpers/telegram');

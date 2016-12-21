@@ -33,7 +33,7 @@ function findRandomMeme(toonCapsClient, searchTerms) {
         const memeText = getMemeText(screenshot, captions);
         // construct meme url
         return {
-          episode: captions.epiode,
+          episode: captions.episode,
           screenshot,
           captions,
           meme: {

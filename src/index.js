@@ -4,7 +4,10 @@ const toonCaps = require('toon-caps');
 
 bot.onText(
   /\/(morbotron|frinkiac) (.+)/,
-  ({chat}, [ignore, toonCapsKey, searchTerms]) =>
+  ({message_id, chat}, [ignore, toonCapsKey, searchTerms]) =>
     findRandomMeme(toonCaps[toonCapsKey], searchTerms)
-      .then(({meme}) => bot.sendPhoto(chat.id, meme.imageUrl))
+      .then(({meme, episode}) => bot.sendPhoto(chat.id, meme.imageUrl, {
+        caption: episode.wikiLink,
+        reply_to_message_id: message_id
+      }))
 );

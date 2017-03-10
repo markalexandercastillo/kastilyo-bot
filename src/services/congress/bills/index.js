@@ -8,26 +8,10 @@ const _ = require('lodash')
 function getDataPromises(id) {
   const cacheHashKey = `bill-${slugifyId(id)}`;
   return [
-    cache.hash.fetchField(
-      cacheHashKey,
-      'data',
-      () => data.get(id)
-    ),
-    cache.hash.fetchField(
-      cacheHashKey,
-      'subjects',
-      () => data.getSubjects(id)
-    ),
-    cache.hash.fetchField(
-      cacheHashKey,
-      'amendments',
-      () => data.getAmendments(id)
-    ),
-    cache.hash.fetchField(
-      cacheHashKey,
-      'cosponsors',
-      () => data.getCosponsorIds(id).map(members.get)
-    )
+    cache.hash.fetchField(cacheHashKey, 'data', () => data.get(id)),
+    cache.hash.fetchField(cacheHashKey, 'subjects', () => data.getSubjects(id)),
+    cache.hash.fetchField(cacheHashKey, 'amendments', () => data.getAmendments(id)),
+    cache.hash.fetchField(cacheHashKey, 'cosponsors', () => data.getCosponsorIds(id).map(members.get))
   ];
 }
 
@@ -57,34 +41,25 @@ function get(idOrIds) {
   return _.isArray(idOrIds) ? getMany(idOrIds) : getOne(idOrIds);
 }
 
+function getRecent(chamber, type, offset = 0) {
+  return cache.set.fetch(
+    `bills-${type}-${chamber}`,
+    () => data.getRecentIds(chamber, type, offset)
+  ).then(getMany);
+}
+
 module.exports = {
   get,
   getIntroduced(chamber, offset = 0) {
-    const type = 'introduced';
-    return cache.set.fetch(
-      `bills-${type}-${chamber}`,
-      () => data.getRecentIds(chamber, type, offset)
-    ).map(get);
+    return getRecent(chamber, 'introduced', offset);
   },
   getUpdated(chamber, offset = 0) {
-    const type = 'updated';
-    return cache.set.fetch(
-      `bills-${type}-${chamber}`,
-      () => data.getRecentIds(chamber, type, offset)
-    ).map(get);
+    return getRecent(chamber, 'updated', offset);
   },
   getPassed(chamber, offset = 0) {
-    const type = 'passed';
-    return cache.set.fetch(
-      `bills-${type}-${chamber}`,
-      () => data.getRecentIds(chamber, type, offset)
-    ).map(get);
+    return getRecent(chamber, 'passed', offset);
   },
   getMajor(chamber, offset = 0) {
-    const type = 'major';
-    return cache.set.fetch(
-      `bills-${type}-${chamber}`,
-      () => data.getRecentIds(chamber, type, offset)
-    ).map(get);
+    return getRecent(chamber, 'major', offset);
   }
 };

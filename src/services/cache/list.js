@@ -17,7 +17,7 @@ const proto = {
   },
   push(key, items) {
     key = this.getNamespacedKey(key);
-    debug(`Getting ${stringify(items)} of '${key}'`);
+    debug(`Pushing ${stringify(items)} for '${key}'`);
     return redis.lpushAsync(key, ...items);
   },
   fetch(key, missHandler) {

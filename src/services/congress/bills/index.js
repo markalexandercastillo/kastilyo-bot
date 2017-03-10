@@ -28,8 +28,7 @@ function getOne(id) {
 }
 
 function getMany(ids) {
-  return Promise.all(ids.map(getData))
-    .map(mergeData);
+  return Promise.all(ids.map(getOne));
 }
 
 function get(idOrIds) {

@@ -1,14 +1,33 @@
 const _ = require('lodash')
   , Promise = require('bluebird')
+  , slugifyId = require('./slugifyId')
   , data = require('./data')
+  , cache = require('./../../cache').create('kastilyo-bot', 'congress', 'bills')
   , members = require('./../members');
 
 function getDataPromises(id) {
+  const cacheHashKey = `bill-${slugifyId(id)}`;
   return [
-    data.get(id),
-    data.getSubjects(id),
-    data.getAmendments(id),
-    data.getCosponsorIds(id).map(members.get)
+    cache.hash.fetchField(
+      cacheHashKey,
+      'data',
+      () => data.get(id)
+    ),
+    cache.hash.fetchField(
+      cacheHashKey,
+      'subjects',
+      () => data.getSubjects(id)
+    ),
+    cache.hash.fetchField(
+      cacheHashKey,
+      'amendments',
+      () => data.getAmendments(id)
+    ),
+    cache.hash.fetchField(
+      cacheHashKey,
+      'cosponsors',
+      () => data.getCosponsorIds(id).map(members.get)
+    )
   ];
 }
 
@@ -41,15 +60,31 @@ function get(idOrIds) {
 module.exports = {
   get,
   getIntroduced(chamber, offset = 0) {
-    return data.getRecentIds(chamber, 'introduced', offset).map(get);
+    const type = 'introduced';
+    return cache.set.fetch(
+      `bills-${type}-${chamber}`,
+      () => data.getRecentIds(chamber, type, offset)
+    ).map(get);
   },
   getUpdated(chamber, offset = 0) {
-    return data.getRecentIds(chamber, 'updated', offset).map(get);
+    const type = 'updated';
+    return cache.set.fetch(
+      `bills-${type}-${chamber}`,
+      () => data.getRecentIds(chamber, type, offset)
+    ).map(get);
   },
   getPassed(chamber, offset = 0) {
-    return data.getRecentIds(chamber, 'passed', offset).map(get);
+    const type = 'passed';
+    return cache.set.fetch(
+      `bills-${type}-${chamber}`,
+      () => data.getRecentIds(chamber, type, offset)
+    ).map(get);
   },
   getMajor(chamber, offset = 0) {
-    return data.getRecentIds(chamber, 'major', offset).map(get);
+    const type = 'major';
+    return cache.set.fetch(
+      `bills-${type}-${chamber}`,
+      () => data.getRecentIds(chamber, type, offset)
+    ).map(get);
   }
 };

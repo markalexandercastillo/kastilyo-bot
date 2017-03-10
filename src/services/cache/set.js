@@ -19,6 +19,15 @@ const proto = {
     key = this.getNamespacedKey(key);
     debug(`Adding members ${stringify(members)} to '${key}'`);
     return redis.saddAsync(key, ...members);
+  },
+  fetch(key, missHandler) {
+    return this.get(key)
+      .then(members => {
+        if (members.length) return members;
+        debug(`Could night find members of '${stringify(key)}'`);
+        return Promise.resolve(missHandler())
+          .then(freshMembers => this.add(key, freshMembers).return(freshMembers));
+      });
   }
 };
 

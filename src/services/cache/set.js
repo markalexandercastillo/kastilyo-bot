@@ -26,7 +26,10 @@ const proto = {
         if (members.length) return members;
         debug(`Could night find members of '${stringify(key)}'`);
         return Promise.resolve(missHandler())
-          .then(freshMembers => this.add(key, freshMembers).return(freshMembers));
+          .then(freshMembers => freshMembers.length
+            ? this.add(key, freshMembers).return(freshMembers)
+            : []
+          );
       });
   }
 };

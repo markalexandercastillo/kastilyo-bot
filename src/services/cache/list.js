@@ -26,7 +26,10 @@ const proto = {
         if (hitItems.length) return hitItems;
         debug(`Could not find items of '${key}'`);
         return Promise.resolve(missHandler())
-          .then(freshItems => this.push(key, freshItems).return(freshItems));
+          .then(freshItems => freshItems.length
+            ? this.push(key, freshItems).return(freshItems)
+            : []
+          );
       });
   }
 };

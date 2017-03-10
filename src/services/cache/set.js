@@ -1,5 +1,5 @@
 const _ = require('lodash')
-  , debug = require('./../debug')('cache', 'hash')
+  , debug = require('./../debug')('cache', 'set')
   , redis = require('./../../helpers/redis');
 
 const {assign} = _;
@@ -24,7 +24,7 @@ const proto = {
     return this.get(key)
       .then(members => {
         if (members.length) return members;
-        debug(`Could night find members of '${stringify(key)}'`);
+        debug(`Could not find members of '${key}'`);
         return Promise.resolve(missHandler())
           .then(freshMembers => freshMembers.length
             ? this.add(key, freshMembers).return(freshMembers)

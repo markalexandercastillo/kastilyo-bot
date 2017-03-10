@@ -1,5 +1,5 @@
 const _ = require('lodash')
-  , debug = require('./../debug')('cache', 'hash')
+  , debug = require('./../debug')('cache', 'list')
   , redis = require('./../../helpers/redis');
 
 const {assign} = _;

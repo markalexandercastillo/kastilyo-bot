@@ -7,6 +7,14 @@ const _ = require('lodash')
   , ppc = require('./../../../helpers/propublica-congress')
   , slugifyId = require('./slugifyId');
 
+function getDetails(id, type) {
+  return new Promise((resolve, reject) => {
+    ppc.getAdditionalBillDetails(slugifyId(id), type)
+      .then(data => resolve(data.results[0][type]))
+      .catch(reject);
+  });
+}
+
 module.exports = {
   get(id) {
     return new Promise((resolve, reject) => {
@@ -22,11 +30,14 @@ module.exports = {
         .catch(reject);
     });
   },
-  getDetails(id, type) {
-    return new Promise((resolve, reject) => {
-      ppc.getAdditionalBillDetails(slugifyId(id), type)
-        .then(data => resolve(data.results[0][type]))
-        .catch(reject);
-    });
+  getSubjects(id) {
+    return getDetails(id, 'subjects');
+  },
+  getAmendments(id) {
+    return getDetails(id, 'amendments');
+  },
+  getCosponsorIds(id) {
+    return getDetails(id, 'cosponsors')
+      .then(cosponsors => _.map(cosponsors, 'cosponsor_id'));
   }
 };

@@ -6,9 +6,9 @@ const _ = require('lodash')
 function getDataPromises(id) {
   return [
     data.get(id),
-    data.getDetails(id, 'subjects'),
-    data.getDetails(id, 'amendments'),
-    data.getDetails(id, 'cosponsors').then(cosponsors => _.map(cosponsors, 'cosponsor_id')).map(members.get)
+    data.getSubjects(id),
+    data.getAmendments(id),
+    data.getCosponsorIds(id).map(members.get)
   ];
 }
 

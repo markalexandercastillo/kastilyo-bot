@@ -14,12 +14,10 @@ module.exports = {
     );
   },
   getIdList(chamber, offset = 0) {
-    return new Promise(
-      (resolve, reject) => Promise.resolve(ppc.getMemberList(chamber, {offset}))
-        .then(data => data.results[0].members)
-        .map(member =>  member.id)
-        .then(resolve)
+    return (new Promise(
+      (resolve, reject) => ppc.getMemberList(chamber, {offset})
+        .then(data => resolve(data.results[0].members))
         .catch(reject)
-    );
+    )).map(member =>  member.id);
   }
 };

@@ -5,11 +5,7 @@ const _ = require('lodash')
 
 function getOne(id) {
   const key = `member-${id}`;
-  return cache.hash.get(key)
-    .then(member => {
-      if (member) return member;
-      data.get(id).then(freshMember => cache.hash.set(key, freshMember).return(freshMember)); 
-    });
+  return cache.hash.fetchField(key, 'data', () => data.get(id));
 }
 
 function getMany(ids) {

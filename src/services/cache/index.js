@@ -7,13 +7,13 @@ function create(...namespaces) {
   return {
     hash: createHash(...namespaces),
     list: createList(...namespaces),
-    set: createSet(...namespaces),
-    flushAll() {
-      return redis.flushallAsync();
-    }
+    set: createSet(...namespaces)
   };
 }
 
 module.exports = {
-  create
+  create,
+  flushAll() {
+    return redis.flushallAsync();
+  }
 };

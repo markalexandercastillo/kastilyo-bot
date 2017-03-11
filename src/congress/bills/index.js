@@ -44,6 +44,7 @@ function getRecent(chamber, type, offset = 0) {
 
 module.exports = {
   get,
+  getRecent,
   getIntroduced(chamber, offset = 0) {
     return getRecent(chamber, 'introduced', offset);
   },

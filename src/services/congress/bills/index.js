@@ -36,7 +36,7 @@ function get(idOrIds) {
 }
 
 function getRecent(chamber, type, offset = 0) {
-  return cache.set.fetch(
+  return cache.list.fetch(
     `bills-${type}-${chamber}-${offset}`,
     () => data.getRecentIds(chamber, type, offset)
   ).then(getMany);

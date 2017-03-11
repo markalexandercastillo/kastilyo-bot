@@ -8,6 +8,12 @@ function getOne(id) {
   return cache.hash.fetchField(key, 'data', () => data.get(id));
 }
 
+function getList(chamber, offset = 0) {
+  const key = `members-${chamber}-${offset}`;
+  return cache.list.fetch(key, () => data.getIdList(chamber, offset))
+    .map(getOne);
+}
+
 function getMany(ids) {
   return Promise.all(ids.map(getOne));
 }
@@ -17,5 +23,6 @@ function get(idOrIds) {
 }
 
 module.exports = {
-  get
+  get,
+  getList
 };

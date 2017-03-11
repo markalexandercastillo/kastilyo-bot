@@ -7,10 +7,10 @@ const Promise = require('bluebird')
 
 module.exports = {
   get(id) {
-    return new Promise((resolve, reject) => {
-      ppc.getMember(id)
+    return new Promise(
+      (resolve, reject) => ppc.getMember(id)
         .then(data => resolve(data.results[0]))
-        .catch(reject);
-    });
+        .catch(reject)
+    );
   }
 };

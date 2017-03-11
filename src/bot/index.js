@@ -1,5 +1,5 @@
-const bot = require('./helpers/telegram');
-const tc = require('./toon-caps');
+const bot = require('./../helpers/telegram');
+const tc = require('./../toon-caps');
 
 bot.onText(
   /\/(morbotron|frinkiac) (.+)/,

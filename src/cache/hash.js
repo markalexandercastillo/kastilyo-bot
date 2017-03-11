@@ -1,7 +1,7 @@
 const _ = require('lodash')
   , Promise = require('bluebird')
   , debug = require('./../debug')('cache', 'hash')
-  , redis = require('./../../helpers/redis');
+  , redis = require('./../helpers/redis');
 
 const {keys:fields, difference, flatten, assign, mapValues} = _;
 const {stringify, parse} = JSON;

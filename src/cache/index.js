@@ -1,4 +1,4 @@
-const redis = require('./../../helpers/redis')
+const redis = require('./../helpers/redis')
   , createHash = require('./hash').create
   , createList = require('./list').create
   , createSet = require('./set').create;

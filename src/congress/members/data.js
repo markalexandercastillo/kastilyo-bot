@@ -3,7 +3,7 @@
  * and while also plucking out relevant data from api response data structure.
  */
 const Promise = require('bluebird')
-  , ppc = require('./../../../helpers/propublica-congress');
+  , ppc = require('./../../helpers/propublica-congress');
 
 module.exports = {
   get(id) {

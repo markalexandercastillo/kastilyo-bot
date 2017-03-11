@@ -1,6 +1,6 @@
 const _ = require('lodash')
   , debug = require('./../debug')('cache', 'set')
-  , redis = require('./../../helpers/redis');
+  , redis = require('./../helpers/redis');
 
 const {assign} = _;
 const {stringify} = JSON;

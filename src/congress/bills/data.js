@@ -4,7 +4,7 @@
  */
 const _ = require('lodash')
   , Promise = require('bluebird')
-  , ppc = require('./../../../helpers/propublica-congress')
+  , ppc = require('./../../helpers/propublica-congress')
   , slugifyId = require('./slugifyId');
 
 function getDetails(id, type) {

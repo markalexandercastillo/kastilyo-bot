@@ -12,7 +12,7 @@ function getBillsTextAndReplyMarkup(chamber, recentBillType, offset) {
 
 function extend(bot) {
   bot.onText(
-    /\/congress bills (introduced|major|updated|passed)/,
+    /\/congress bills (introduced|major|updated|passed)$/,
     (message, [ignore, recentBillType]) => {
       const [text, reply_markup] = chamberSelection(recentBillType);
       bot.sendMessage(message.chat.id, text, {reply_markup});
@@ -20,7 +20,7 @@ function extend(bot) {
   );
 
   bot.onText(
-    /\/congress bills (senate|house)/,
+    /\/congress bills (senate|house)$/,
     (message, [ignore, chamber]) => {
       const [text, reply_markup] = recentBillTypeSelection(chamber);
       bot.sendMessage(message.chat.id, text, {reply_markup});
@@ -28,7 +28,7 @@ function extend(bot) {
   );
 
   bot.onText(
-    /\/congress bills (introduced|major|updated|passed) (senate|house)( \d+)*/,
+    /\/congress bills (introduced|major|updated|passed) (senate|house)( \d+)*$/,
     (message, [ignore, recentBillType, chamber, offset = 0]) =>
       recentBillSelection(chamber, recentBillType, parseInt(offset))
         .then(([text, reply_markup]) =>

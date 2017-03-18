@@ -10,6 +10,22 @@ function getBillsTextAndReplyMarkup({chamber = null, recentBillType = null, offs
   if (chamber && recentBillType) return recentBillSelection(chamber, recentBillType, offset);
 }
 
+function resolveBillsCallbackQueryArgs(args) {
+  let chamber, recentBillType;
+  args.forEach(arg => {
+    if (chambers.contains(arg)) chamber = arg;
+    if (recentBillTypes.contains(arg)) recentBillType = arg;
+  });
+
+  const offset = args[2] || 0;
+
+  return {
+    chamber,
+    recentBillType,
+    offset
+  };
+}
+
 function extend(bot) {
   bot.onText(
     /\/congress bills$/,
@@ -49,20 +65,9 @@ function extend(bot) {
   );
 
   bot.on('callback_query', ({message, data}) => {
-    data = data.split('|');
-    const [type, resource, ...args] = data;
+    const [type, resource, ...args] = data.split('|');
     if (type === 'congress' && resource === 'bills' && args.length) {
-      let chamber, recentBillType;
-
-      args.forEach(arg => {
-        if (chambers.contains(arg)) chamber = arg;
-        if (recentBillTypes.contains(arg)) recentBillType = arg;
-      });
-      const offset = args[2] || 0;
-
-      const gettingTextAndReplyMarkup = getBillsTextAndReplyMarkup({chamber, recentBillType, offset});
-
-      gettingTextAndReplyMarkup
+      getBillsTextAndReplyMarkup(resolveBillsCallbackQueryArgs(args))
         .then(([text, reply_markup]) =>
           bot.editMessageText(text, {
             chat_id: message.chat.id,

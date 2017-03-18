@@ -13,44 +13,39 @@ function getBillsTextAndReplyMarkup({chamber = null, recentBillType = null, offs
 function extend(bot) {
   bot.onText(
     /\/congress bills$/,
-    message => {
-      const [text, reply_markup] = chamberSelection();
-      bot.sendMessage(message.chat.id, text, {reply_markup});
-    }
+    message => getBillsTextAndReplyMarkup().then(
+      ([text, reply_markup]) => bot.sendMessage(message.chat.id, text, {reply_markup})
+    )
   );
 
   bot.onText(
     /\/congress bills (introduced|major|updated|passed)$/,
-    (message, [ignore, recentBillType]) => {
-      const [text, reply_markup] = chamberSelection(recentBillType);
-      bot.sendMessage(message.chat.id, text, {reply_markup});
-    }
+    (message, [ignore, recentBillType]) => getBillsTextAndReplyMarkup({recentBillType}).then(
+      ([text, reply_markup]) => bot.sendMessage(message.chat.id, text, {reply_markup})
+    )
   );
 
   bot.onText(
     /\/congress bills (senate|house)$/,
-    (message, [ignore, chamber]) => {
-      const [text, reply_markup] = recentBillTypeSelection(chamber);
-      bot.sendMessage(message.chat.id, text, {reply_markup});
-    }
+    (message, [ignore, chamber]) => getBillsTextAndReplyMarkup({chamber}).then(
+      ([text, reply_markup]) => bot.sendMessage(message.chat.id, text, {reply_markup})
+    )
   );
 
   bot.onText(
     /\/congress bills (introduced|major|updated|passed) (senate|house)( \d+)*$/,
     (message, [ignore, recentBillType, chamber, offset = 0]) =>
-      recentBillSelection(chamber, recentBillType, parseInt(offset))
-        .then(([text, reply_markup]) =>
-          bot.sendMessage(message.chat.id, text, {reply_markup})
-        )
+      getBillsTextAndReplyMarkup({chamber, recentBillType, offset}).then(
+        ([text, reply_markup]) => bot.sendMessage(message.chat.id, text, {reply_markup})
+      )
   );
 
   bot.onText(
     /\/congress bills (senate|house) (introduced|major|updated|passed)( \d+)*$/,
     (message, [ignore, chamber, recentBillType, offset = 0]) =>
-      recentBillSelection(chamber, recentBillType, parseInt(offset))
-        .then(([text, reply_markup]) =>
-          bot.sendMessage(message.chat.id, text, {reply_markup})
-        )
+      getBillsTextAndReplyMarkup({chamber, recentBillType, offset}).then(
+        ([text, reply_markup]) => bot.sendMessage(message.chat.id, text, {reply_markup})
+      )
   );
 
   bot.on('callback_query', ({message, data}) => {

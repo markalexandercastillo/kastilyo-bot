@@ -4,10 +4,10 @@ const recentBillSelection = require('./recentBillSelection');
 const chambers = require('./chambers');
 const recentBillTypes = require('./recentBillTypes');
 
-function getBillsTextAndReplyMarkup(chamber, recentBillType, offset) {
-  if (!recentBillType) return Promise.resolve(recentBillTypeSelection(chamber));
+function getBillsTextAndReplyMarkup({chamber = null, recentBillType = null, offset = 0} = {}) {
   if (!chamber) return Promise.resolve(chamberSelection(recentBillType));
-  if (chamber) return recentBillSelection(chamber, recentBillType, offset);
+  if (!recentBillType) return Promise.resolve(recentBillTypeSelection(chamber));
+  if (chamber && recentBillType) return recentBillSelection(chamber, recentBillType, offset);
 }
 
 function extend(bot) {
@@ -65,7 +65,7 @@ function extend(bot) {
       });
       const offset = args[2] || 0;
 
-      const gettingTextAndReplyMarkup = getBillsTextAndReplyMarkup(chamber, recentBillType, offset);
+      const gettingTextAndReplyMarkup = getBillsTextAndReplyMarkup({chamber, recentBillType, offset});
 
       gettingTextAndReplyMarkup
         .then(([text, reply_markup]) =>

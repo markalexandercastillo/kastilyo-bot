@@ -36,6 +36,15 @@ function extend(bot) {
         )
   );
 
+  bot.onText(
+    /\/congress bills (senate|house) (introduced|major|updated|passed)( \d+)*$/,
+    (message, [ignore, chamber, recentBillType, offset = 0]) =>
+      recentBillSelection(chamber, recentBillType, parseInt(offset))
+        .then(([text, reply_markup]) =>
+          bot.sendMessage(message.chat.id, text, {reply_markup})
+        )
+  );
+
   bot.on('callback_query', ({message, data}) => {
     data = data.split('|');
     const [type, resource, ...args] = data;

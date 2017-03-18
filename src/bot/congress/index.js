@@ -12,6 +12,14 @@ function getBillsTextAndReplyMarkup(chamber, recentBillType, offset) {
 
 function extend(bot) {
   bot.onText(
+    /\/congress bills$/,
+    message => {
+      const [text, reply_markup] = chamberSelection();
+      bot.sendMessage(message.chat.id, text, {reply_markup});
+    }
+  );
+
+  bot.onText(
     /\/congress bills (introduced|major|updated|passed)$/,
     (message, [ignore, recentBillType]) => {
       const [text, reply_markup] = chamberSelection(recentBillType);

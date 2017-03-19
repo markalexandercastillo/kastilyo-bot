@@ -6,10 +6,10 @@ const {slice, filter} = require('lodash')
 const navButtons = (chamber, recentBillType, offset) => {
   const [nextOffset, prevOffset] = [offset + 5, offset - 5];
   const nextButton = nextOffset < 20
-    ? button('See more', ['congress', 'bills', chamber, recentBillType, nextOffset])
+    ? button('See more bills', ['congress', 'bills', chamber, recentBillType, nextOffset])
     : null;
   const prevButton = prevOffset >= 0
-    ? button('See previous', ['congress', 'bills', chamber, recentBillType, prevOffset])
+    ? button('See previous bills', ['congress', 'bills', chamber, recentBillType, prevOffset])
     : null;
   return filter([prevButton, nextButton]);
 };

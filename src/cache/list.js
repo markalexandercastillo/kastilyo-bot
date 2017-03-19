@@ -1,6 +1,6 @@
 const _ = require('lodash')
   , debug = require('./../debug')('cache', 'list')
-  , redis = require('./../helpers/redis');
+  , redis = require('./redis');
 
 const {assign} = _;
 const {stringify} = JSON;
@@ -13,12 +13,12 @@ const proto = {
   get(key) {
     key = this.getNamespacedKey(key);
     debug(`Getting items of '${key}'`);
-    return redis.lrangeAsync(key, 0, -1);
+    return redis.lrange(key, 0, -1);
   },
   push(key, items) {
     key = this.getNamespacedKey(key);
     debug(`Pushing ${stringify(items)} for '${key}'`);
-    return redis.rpushAsync(key, ...items);
+    return redis.rpush(key, ...items);
   },
   fetch(key, missHandler) {
     return this.get(key)

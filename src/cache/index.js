@@ -1,4 +1,4 @@
-const redis = require('./../helpers/redis')
+const redis = require('./redis')
   , createHash = require('./hash').create
   , createList = require('./list').create
   , createSet = require('./set').create;
@@ -14,6 +14,6 @@ function create(...namespaces) {
 module.exports = {
   create,
   flushAll() {
-    return redis.flushallAsync();
+    return redis.flushall();
   }
 };

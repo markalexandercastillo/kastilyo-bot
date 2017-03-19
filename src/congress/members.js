@@ -1,16 +1,16 @@
 const _ = require('lodash')
   , Promise = require('bluebird')
-  , cache = require('./../../cache').create('kastilyo-bot', 'congress', 'members')
-  , data = require('./data');
+  , cache = require('./../cache').create('kastilyo-bot', 'congress', 'members')
+  , ppc = require('./propublica-congress');
 
 function getOne(id) {
   const key = `member-${id}`;
-  return cache.hash.fetchField(key, 'data', () => data.get(id));
+  return cache.hash.fetchField(key, 'data', () => ppc.getMember(id));
 }
 
 function getList(chamber, offset = 0) {
   const key = `members-${chamber}-${offset}`;
-  return cache.list.fetch(key, () => data.getIdList(chamber, offset))
+  return cache.list.fetch(key, () => ppc.getMemberIds(chamber, offset))
     .map(getOne);
 }
 

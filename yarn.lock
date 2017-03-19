@@ -1303,9 +1303,9 @@ prompt@^0.2.14:
     utile "0.2.x"
     winston "0.8.x"
 
-propublica-congress@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/propublica-congress/-/propublica-congress-2.0.1.tgz#1212ae8454dc200320a9a81268c4d0b2fedd1206"
+propublica-congress@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/propublica-congress/-/propublica-congress-2.0.2.tgz#82d02a9d1c51305194371f0a291cbecb63fd61e9"
   dependencies:
     got "^6.7.1"
 

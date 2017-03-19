@@ -15,7 +15,7 @@
     "dotenv": "^2.0.0",
     "lodash": "^4.17.2",
     "node-telegram-bot-api": "^0.27.0",
-    "propublica-congress": "^2.0.1",
+    "propublica-congress": "^2.0.2",
     "redis": "^2.6.5",
     "rxjs": "^5.0.1",
     "toon-caps": "^1.0.0"

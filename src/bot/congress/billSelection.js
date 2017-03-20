@@ -1,9 +1,12 @@
-const {inlineKeyboard, button} = require('./../utils');
-
-module.exports = (text, bills, ...additionalRows) => [
+module.exports = (text, bills, ...additionalRows) => ({
   text,
-  inlineKeyboard(...bills.map(({number, title}) => [button(
-    `${number} - ${title}`,
-    ['congress', 'bill', number]
-  )]).concat(additionalRows))
-];
+  reply_markup: {
+    inline_keyboard: [
+      ...bills.map(({number, title}) => [{
+        text: `${number} - ${title}`,
+        callback_data: ['congress', 'bill', number].join('|')
+      }]),
+      ...additionalRows
+    ]
+  }
+});

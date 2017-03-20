@@ -1,13 +1,15 @@
 const {filter, upperFirst, chunk} = require('lodash')
-  , {inlineKeyboard, button} = require('./../utils')
-  , recentBillTypes = require('./recentBillTypes');
+  , congress = require('./../../congress');
 
-module.exports = chamber => [
-  'Select a type of recent bill',
-  inlineKeyboard(...chunk(
-    recentBillTypes.map(recentBillType => button(
-      upperFirst(recentBillType), filter(['congress', 'bills', chamber, recentBillType])
-    )),
-    2
-  ))
-];
+module.exports = chamber => ({
+  text: 'Select a type of recent bill',
+  reply_markup: {
+    inline_keyboard: chunk(
+      congress.bills.recentTypes.map(recentBillType => ({
+        text: upperFirst(recentBillType),
+        callback_data: filter(['congress', 'bills', chamber, recentBillType]).join('|')
+      })),
+      2
+    )
+  }
+});

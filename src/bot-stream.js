@@ -30,29 +30,29 @@ const command$ = text$
     };
   });
 
-const sendMessageBus = new Bus();
-const editMessageTextBus = new Bus();
-const sendPhotoBus = new Bus();
+const sendMessageBus$ = new Bus();
+const editMessageTextBus$ = new Bus();
+const sendPhotoBus$ = new Bus();
 
 function pushSendMessage(chatId, text, options = {}) {
-  sendMessageBus.push({chatId, text, options});
+  sendMessageBus$.push({chatId, text, options});
 }
 
-sendMessageBus
+sendMessageBus$
   .onValue(({chatId, text, options}) => telegram.sendMessage(chatId, text, options));
 
 function pushEditMessageText(text, options) {
-  editMessageTextBus.push({text, options});
+  editMessageTextBus$.push({text, options});
 }
 
-editMessageTextBus
+editMessageTextBus$
   .onValue(({text, options}) => telegram.editMessageText(text, options));
 
 function pushSendPhoto(chatId, photo, options = {}) {
-  sendPhotoBus.push({chatId, photo, options});
+  sendPhotoBus$.push({chatId, photo, options});
 }
 
-sendPhotoBus
+sendPhotoBus$
   .onValue(({chatId, photo, options}) => telegram.sendPhoto(chatId, photo, options));
 
 module.exports = {

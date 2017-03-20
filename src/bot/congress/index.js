@@ -26,8 +26,8 @@ function resolveBillsArgs(args) {
   };
 }
 
-function extend({callbackQuery$, cliCommand$, pushSendMessage, pushEditMessageText}) {
-  const congressCommand$ = cliCommand$
+function extend({callbackQuery$, command$, pushSendMessage, pushEditMessageText}) {
+  const congressCommand$ = command$
     .merge(callbackQuery$)
     .filter(({type}) => type === 'congress');
 

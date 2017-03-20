@@ -19,17 +19,15 @@ const command$ = text$
   .filter(({entities = []}) => find(entities, {type: 'bot_command', offset: 0}))
   .map(message => {
     const commandEntity = find(message.entities, {type: 'bot_command'});
+    const query = message.text.slice(commandEntity.length + 1);
+    const [subType, ...args] = query.split(' ');
     return {
       message,
+      query,
       type: message.text.slice(1, commandEntity.length),
-      query: message.text.slice(commandEntity.length + 1)
+      subType,
+      args
     };
-  });
-
-const cliCommand$ = command$
-  .map(command => {
-    const [subType, ...args] = command.query.split(' ');
-    return assign(command, {subType, args});
   });
 
 const sendMessageBus = new Bus();
@@ -60,7 +58,6 @@ sendPhotoBus
 module.exports = {
   text$,
   callbackQuery$,
-  cliCommand$,
   command$,
   pushSendMessage,
   pushEditMessageText,

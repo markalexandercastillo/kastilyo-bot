@@ -95,6 +95,10 @@ axios@^0.15.3:
   dependencies:
     follow-redirects "1.0.0"
 
+baconjs@^0.7.92:
+  version "0.7.92"
+  resolved "https://registry.yarnpkg.com/baconjs/-/baconjs-0.7.92.tgz#30dee0d9f841cc71b59f67bdced7c13008b485f3"
+
 balanced-match@^0.4.1:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-0.4.2.tgz#cb3f3e3c732dc0f01ee70b403f302e61d7709838"

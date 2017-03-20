@@ -43,7 +43,7 @@ function extend({callbackQuery$, command$, pushSendMessage, pushEditMessageText}
         .then(({text, reply_markup}) => pushSendMessage(message.chat.id, text, {reply_markup}))
   );
 
-  billsCommand$.onValue(({args, message, callbackQueryId}) => {
+  billsCommand$.onValue(({args, message, callbackQueryId}) =>
     getBillsTextAndReplyMarkup(resolveBillsArgs(args))
       .then(({text, reply_markup}) => {
         callbackQueryId
@@ -53,8 +53,8 @@ function extend({callbackQuery$, command$, pushSendMessage, pushEditMessageText}
             reply_markup
           })
           : pushSendMessage(message.chat.id, text, {reply_markup});
-      });
-  });
+      })
+  );
 }
 
 module.exports = {

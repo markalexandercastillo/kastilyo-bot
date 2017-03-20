@@ -1,8 +1,6 @@
-const bot = require('./../bot-stream');
-const tc = require('./toon-caps');
-const congress = require('./congress');
-const cache = require('./cache');
+const bot = require('./../bot-stream')
+  , tc = require('./toon-caps')
+  , congress = require('./congress')
+  , cache = require('./cache');
 
-tc.extend(bot);
-congress.extend(bot);
-cache.extend(bot);
+bot.use(tc, congress, cache);

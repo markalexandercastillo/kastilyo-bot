@@ -64,5 +64,8 @@ module.exports = {
   command$,
   pushSendMessage,
   pushEditMessageText,
-  pushSendPhoto
+  pushSendPhoto,
+  use(...modules) {
+    modules.forEach(({extend}) => extend(this));
+  }
 };

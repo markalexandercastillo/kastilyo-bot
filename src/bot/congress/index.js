@@ -45,15 +45,15 @@ function extend({callbackQuery$, command$, pushSendMessage, pushEditMessageText}
 
   billsCommand$.onValue(({args, message, callbackQueryId}) =>
     getBillsTextAndReplyMarkup(resolveBillsArgs(args))
-      .then(({text, reply_markup}) => {
+      .then(({text, reply_markup}) =>
         callbackQueryId
           ? pushEditMessageText(text, {
             chat_id: message.chat.id,
             message_id: message.message_id,
             reply_markup
           })
-          : pushSendMessage(message.chat.id, text, {reply_markup});
-      })
+          : pushSendMessage(message.chat.id, text, {reply_markup})
+      )
   );
 }
 

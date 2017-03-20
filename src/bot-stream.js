@@ -3,7 +3,18 @@ const {fromBinder, Bus} = require('baconjs')
   , telegram = require('./helpers/telegram');
 
 const text$ = fromBinder(sink => telegram.onText(/(.*)/, sink));
-const callbackQuery$ = fromBinder(telegram.onCallbackQuery);
+const callbackQuery$ = fromBinder(sink => telegram.on('callback_query', sink))
+  .map(({id, message, data}) => {
+    const [type, subType, ...args] = data.split('|');
+    return {
+      callbackQueryId: id,
+      message,
+      type,
+      subType,
+      args
+    };
+  });
+
 const command$ = text$
   .filter(({entities = []}) => find(entities, {type: 'bot_command', offset: 0}))
   .map(message => {

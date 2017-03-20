@@ -34,6 +34,7 @@ const cliCommand$ = command$
 
 const sendMessageBus = new Bus();
 const editMessageTextBus = new Bus();
+const sendPhotoBus = new Bus();
 
 function pushSendMessage(chatId, text, options = {}) {
   sendMessageBus.push({chatId, text, options});
@@ -49,11 +50,19 @@ function pushEditMessageText(text, options) {
 editMessageTextBus
   .onValue(({text, options}) => telegram.editMessageText(text, options));
 
+function pushSendPhoto(chatId, photo, options = {}) {
+  sendPhotoBus.push({chatId, photo, options});
+}
+
+sendPhotoBus
+  .onValue(({chatId, photo, options}) => telegram.sendPhoto(chatId, photo, options));
+
 module.exports = {
   text$,
   callbackQuery$,
   cliCommand$,
   command$,
   pushSendMessage,
-  pushEditMessageText
+  pushEditMessageText,
+  pushSendPhoto
 };

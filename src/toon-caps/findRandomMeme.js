@@ -32,22 +32,21 @@ function findRandomMeme(searchTerms) {
     // pick a random one from the result
     .then(_.sample)
     // find captions for the given screenshot
-    .then(screenshot => this.getCaptions(screenshot)
-      .then(captions => {
-        // determine text to use for meme
-        const memeText = getMemeText(screenshot, captions);
-        // construct meme url
-        return {
-          episode: captions.episode,
-          screenshot,
-          captions,
-          meme: {
-            text: memeText,
-            imageUrl: this.getMemeUrl(screenshot, memeText)
-          }
-        };
-      })
-    );
+    .then(screenshot => this.getCaptions(screenshot).then(captions => ({screenshot, captions})))
+    .then(({screenshot, captions}) => {
+      // determine text to use for meme
+      const memeText = getMemeText(screenshot, captions);
+      // construct meme url
+      return {
+        episode: captions.episode,
+        screenshot,
+        captions,
+        meme: {
+          text: memeText,
+          imageUrl: this.getMemeUrl(screenshot, memeText)
+        }
+      };
+    });
 }
 
 module.exports = findRandomMeme;

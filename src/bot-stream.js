@@ -1,5 +1,6 @@
 const {fromBinder, Bus} = require('baconjs')
-  , {find, assign} = require('lodash')
+  , {find, omit} = require('lodash')
+  , debug = require('./debug')('bot-stream')
   , telegram = require('./helpers/telegram');
 
 const text$ = fromBinder(sink => telegram.onText(/(.*)/, sink));
@@ -54,6 +55,12 @@ function pushSendPhoto(chatId, photo, options = {}) {
 
 sendPhotoBus$
   .onValue(({chatId, photo, options}) => telegram.sendPhoto(chatId, photo, options));
+
+callbackQuery$.onValue(data => debug('Callback query: %j', omit(data, 'message')));
+command$.onValue(data => debug('Command: %j', omit(data, 'message')));
+sendMessageBus$.onValue(data => debug('Sending message: %j', data));
+editMessageTextBus$.onValue(data => debug('Editing message: %j', data));
+sendPhotoBus$.onValue(data => debug('Sending photo: %j', data));
 
 module.exports = {
   text$,

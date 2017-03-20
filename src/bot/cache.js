@@ -1,7 +1,7 @@
 const cache = require('./../cache');
 
-function extend({cliCommand$, pushSendMessage}) {
-  const cacheCommand$ = cliCommand$
+function extend({command$, pushSendMessage}) {
+  const cacheCommand$ = command$
     .filter(({type}) => type === 'cache');
 
   const flushCacheCommand$ = cacheCommand$

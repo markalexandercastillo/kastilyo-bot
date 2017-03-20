@@ -1,5 +1,5 @@
 const {fromBinder, Bus} = require('baconjs')
-  , {find} = require('lodash')
+  , {find, assign} = require('lodash')
   , telegram = require('./helpers/telegram');
 
 const text$ = fromBinder(sink => telegram.onText(/(.*)/, sink));
@@ -11,8 +11,14 @@ const command$ = text$
     return {
       message,
       type: message.text.slice(1, commandEntity.length),
-      argString: message.text.slice(commandEntity.length + 1)
+      query: message.text.slice(commandEntity.length + 1)
     };
+  });
+
+const cliCommand$ = command$
+  .map(command => {
+    const [subType, ...args] = command.query.split(' ');
+    return assign(command, {subType, args});
   });
 
 const sendMessageBus = new Bus();
@@ -35,6 +41,7 @@ editMessageTextBus
 module.exports = {
   text$,
   callbackQuery$,
+  cliCommand$,
   command$,
   pushSendMessage,
   pushEditMessageText

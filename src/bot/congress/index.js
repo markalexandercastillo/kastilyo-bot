@@ -10,7 +10,7 @@ function getBillsTextAndReplyMarkup({chamber = null, recentBillType = null, offs
   if (chamber && recentBillType) return recentBillSelection(chamber, recentBillType, offset);
 }
 
-function resolveBillsCallbackQueryArgs(args) {
+function resolveBillsArgs(args) {
   let chamber, recentBillType;
   args.forEach(arg => {
     if (congress.chambers.indexOf(arg) > -1) chamber = arg;
@@ -26,63 +26,34 @@ function resolveBillsCallbackQueryArgs(args) {
   };
 }
 
-function extend(bot) {
-  bot.onText(
-    /\/congress$/,
-    message => Promise.resolve(resourceSelection()).then(
-      ({text, reply_markup}) => bot.sendMessage(message.chat.id, text, {reply_markup})
-    )
+function extend({callbackQuery$, cliCommand$, pushSendMessage, pushEditMessageText}) {
+  const congressCommand$ = cliCommand$
+    .merge(callbackQuery$)
+    .filter(({type}) => type === 'congress');
+
+  const baseCommand$ = congressCommand$
+    .filter(({subType}) => !subType);
+
+  const billsCommand$ = congressCommand$
+    .filter(({subType}) => subType === 'bills');
+
+  baseCommand$.onValue(
+    ({message}) =>
+      Promise.resolve(resourceSelection())
+        .then(({text, reply_markup}) => pushSendMessage(message.chat.id, text, {reply_markup}))
   );
 
-  bot.onText(
-    /\/congress bills$/,
-    message => getBillsTextAndReplyMarkup().then(
-      ({text, reply_markup}) => bot.sendMessage(message.chat.id, text, {reply_markup})
-    )
-  );
-
-  bot.onText(
-    /\/congress bills (introduced|major|updated|passed)$/,
-    (message, [ignore, recentBillType]) => getBillsTextAndReplyMarkup({recentBillType}).then(
-      ({text, reply_markup}) => bot.sendMessage(message.chat.id, text, {reply_markup})
-    )
-  );
-
-  bot.onText(
-    /\/congress bills (senate|house)$/,
-    (message, [ignore, chamber]) => getBillsTextAndReplyMarkup({chamber}).then(
-      ({text, reply_markup}) => bot.sendMessage(message.chat.id, text, {reply_markup})
-    )
-  );
-
-  bot.onText(
-    /\/congress bills (introduced|major|updated|passed) (senate|house)( \d+)*$/,
-    (message, [ignore, recentBillType, chamber, offset = 0]) =>
-      getBillsTextAndReplyMarkup({chamber, recentBillType, offset}).then(
-        ({text, reply_markup}) => bot.sendMessage(message.chat.id, text, {reply_markup})
-      )
-  );
-
-  bot.onText(
-    /\/congress bills (senate|house) (introduced|major|updated|passed)( \d+)*$/,
-    (message, [ignore, chamber, recentBillType, offset = 0]) =>
-      getBillsTextAndReplyMarkup({chamber, recentBillType, offset}).then(
-        ({text, reply_markup}) => bot.sendMessage(message.chat.id, text, {reply_markup})
-      )
-  );
-
-  bot.on('callback_query', ({message, data}) => {
-    const [type, resource, ...args] = data.split('|');
-    if (type === 'congress' && resource === 'bills') {
-      getBillsTextAndReplyMarkup(resolveBillsCallbackQueryArgs(args))
-        .then(({text, reply_markup}) =>
-          bot.editMessageText(text, {
+  billsCommand$.onValue(({args, message, callbackQueryId}) => {
+    getBillsTextAndReplyMarkup(resolveBillsArgs(args))
+      .then(({text, reply_markup}) => {
+        callbackQueryId
+          ? pushEditMessageText(text, {
             chat_id: message.chat.id,
             message_id: message.message_id,
             reply_markup
           })
-        );
-    }
+          : pushSendMessage(message.chat.id, text, {reply_markup});
+      });
   });
 }
 

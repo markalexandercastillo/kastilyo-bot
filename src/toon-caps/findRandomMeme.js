@@ -2,7 +2,7 @@
  * Exports a method for extending a tooncaps client for finding memes based on the
  * given search terms
  */
-const _ = require('lodash');
+const {sample} = require('lodash');
 
 
 /**
@@ -26,27 +26,23 @@ function getMemeText(screenshot, captions) {
  * @param  {String} searchTerms
  * @return {Promise}
  */
-function findRandomMeme(searchTerms) {
+async function findRandomMeme(searchTerms) {
+   // pick a random one screenshot from the search results
+  const screenshot = sample(await this.searchScreenshots(searchTerms));
+  // find captions for the random screenshot
+  const captions = await this.getCaptions(screenshot);
+  // determine text to use for meme
+  const memeText = getMemeText(screenshot, captions);
   // find screenshots based on the given search terms
-  return this.searchScreenshots(searchTerms)
-    // pick a random one from the result
-    .then(_.sample)
-    // find captions for the given screenshot
-    .then(screenshot => this.getCaptions(screenshot).then(captions => ({screenshot, captions})))
-    .then(({screenshot, captions}) => {
-      // determine text to use for meme
-      const memeText = getMemeText(screenshot, captions);
-      // construct meme url
-      return {
-        episode: captions.episode,
-        screenshot,
-        captions,
-        meme: {
-          text: memeText,
-          imageUrl: this.getMemeUrl(screenshot, memeText)
-        }
-      };
-    });
+  return {
+    episode: captions.episode,
+    screenshot,
+    captions,
+    meme: {
+      text: memeText,
+      imageUrl: this.getMemeUrl(screenshot, memeText)
+    }
+  };
 }
 
 module.exports = findRandomMeme;

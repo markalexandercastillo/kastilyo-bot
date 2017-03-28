@@ -27,14 +27,18 @@ const paginationButtons =
       moreBillsButton(chamber, recentBillType, currentOffset)
     ]);
 
-module.exports = (chamber, recentBillType, offset) => {
+module.exports = async function (chamber, recentBillType, offset) {
   offset = offset ? parseInt(offset) : 0;
   const apiOffset = Math.floor(offset / 20) * 20;
-  return congress.bills.getRecent(chamber, recentBillType, apiOffset)
-    .then(bills => slice(bills, offset, offset + 5))
-    .then(bills => billSelection(
-      `Recent ${recentBillType} bills`,
-      bills,
-      paginationButtons(chamber, recentBillType, offset)
-    ));
+  const bills = slice(
+    await congress.bills.getRecent(chamber, recentBillType, apiOffset),
+    offset,
+    offset + 5
+  );
+
+  return billSelection(
+    `Recent ${recentBillType} bills`,
+    bills,
+    paginationButtons(chamber, recentBillType, offset)
+  );
 };

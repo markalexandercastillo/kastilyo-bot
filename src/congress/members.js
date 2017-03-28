@@ -3,10 +3,12 @@ const {isArray, assign} = require('lodash')
   , cache = require('./../cache').create('kastilyo-bot', 'congress', 'members')
   , ppc = require('./propublica-congress');
 
-function getOne(id) {
-  return cache.hash.fetch(`member-${id}`, {
+async function getOne(id) {
+  const {data} = await cache.hash.fetch(`member-${id}`, {
     data: () => ppc.getMember(id)
-  }).then(({data}) => assign(data, {}));
+  });
+
+  return assign(data, {});
 }
 
 function getList(chamber, offset = 0) {

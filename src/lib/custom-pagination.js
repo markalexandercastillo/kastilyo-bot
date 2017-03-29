@@ -10,32 +10,25 @@
  * }
  */
 
-const startIndex = ({pageNum, perPage}) =>
-  perPage * pageNum;
+const startIndex = ({pageNum, perPage}) => perPage * pageNum;
 
-const endIndex =
-  ({pageNum, perPage}) =>
-    (perPage * (pageNum + 1)) - 1;
+const endIndex = ({pageNum, perPage}) => (perPage * (pageNum + 1)) - 1;
 
-const startApiPageNum =
-  (perApiPage, {pageNum, perPage}) =>
-    pageNum && perApiPage !== perPage
-      ? Math.ceil(startIndex({pageNum, perPage}) / perApiPage) - 1
-      : pageNum;
+const startApiPageNum = (perApiPage, {pageNum, perPage}) =>
+  pageNum && perApiPage !== perPage
+    ? Math.ceil(startIndex({pageNum, perPage}) / perApiPage) - 1
+    : pageNum;
 
-const endApiPageNum =
-  (perApiPage, {pageNum, perPage}) =>
-    Math.floor(endIndex({pageNum, perPage}) / perApiPage);
+const endApiPageNum = (perApiPage, {pageNum, perPage}) =>
+  Math.floor(endIndex({pageNum, perPage}) / perApiPage);
 
-const startApiPageIndex =
-  (perApiPage, customPagination) =>
-    startIndex(customPagination) % perApiPage;
+const startApiPageIndex = (perApiPage, customPagination) =>
+  startIndex(customPagination) % perApiPage;
 
-const endApiPageIndex =
-  (perApiPage, customPagination) =>
-    endIndex(customPagination) < perApiPage
-      ? endIndex(customPagination)
-      : endIndex(customPagination) % perApiPage;
+const endApiPageIndex = (perApiPage, customPagination) =>
+  endIndex(customPagination) < perApiPage
+    ? endIndex(customPagination)
+    : endIndex(customPagination) % perApiPage;
 
 module.exports = {
   startIndex,

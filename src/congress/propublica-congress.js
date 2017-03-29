@@ -1,5 +1,5 @@
 /**
- * propublica-congress wrapper. Only exposes ppc instance methods/pops as needed and coerces
+ * propublica-congress wrapper. Only exposes ppc instance methods/props as needed and coerces
  * data to bluebird promises and while also plucking out relevant data from api response data
  * structure.
  */

@@ -1,8 +1,8 @@
 const TelegramBot = require('node-telegram-bot-api');
-const {getPrototypeOf, assign, create} = Object;
-const token = process.env.TELEGRAM_BOT_TOKEN;
-const options = {
+const TelegramBotEventStream = require('telegram-bot-event-stream');
+
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {
   polling: true
-};
-const telegramBot = new TelegramBot(token, options);
-module.exports = assign(create(getPrototypeOf(telegramBot)), telegramBot);
+});
+
+module.exports = TelegramBotEventStream.create(bot);

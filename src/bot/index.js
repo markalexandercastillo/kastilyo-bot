@@ -1,4 +1,4 @@
-const bot = require('./../bot-stream')
+const bot = require('./../helpers/telegram')
   , tc = require('./toon-caps')
   , congress = require('./congress')
   , cache = require('./cache');

@@ -1417,6 +1417,10 @@ lodash@^4.13.1, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.2.0:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
+lodash@^4.17.4:
+  version "4.17.4"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+
 longest@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
@@ -2282,6 +2286,13 @@ tar@~2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
+
+telegram-bot-event-stream@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/telegram-bot-event-stream/-/telegram-bot-event-stream-0.0.3.tgz#34b827e2cc87abb07cf2906a4b193f2d00213966"
+  dependencies:
+    baconjs "^0.7.92"
+    lodash "^4.17.4"
 
 test-exclude@^3.3.0:
   version "3.3.0"

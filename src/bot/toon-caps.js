@@ -1,17 +1,17 @@
 const tc = require('./../toon-caps');
 
-function extend({command$, pushSendPhoto, pushSendMessage}) {
+function extend({command$, bot}) {
   const tcCommand$ = command$
-    .filter(({type, query}) => (type === 'morbotron' || type === 'frinkiac') && query);
+    .filter(({type, args}) => (type === 'morbotron' || type === 'frinkiac') && args.length);
 
   tcCommand$.onValue(
-    ({type, query, message}) =>
-        tc[type].findRandomMeme(query)
-          .then(({meme, episode}) => pushSendPhoto(message.chat.id, meme.imageUrl, {
+    ({type, args, message}) =>
+        tc[type].findRandomMeme(args.join(' '))
+          .then(({meme, episode}) => bot.sendPhoto(message.chat.id, meme.imageUrl, {
             caption: episode.wikiLink,
             reply_to_message_id: message.message_id
           }))
-          .catch(() => pushSendMessage(
+          .catch(() => bot.sendMessage(
             message.chat.id,
             "Couldn't find anything",
             {reply_to_message_id: message.message_id}

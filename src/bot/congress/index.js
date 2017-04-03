@@ -1,8 +1,9 @@
-const resourceSelection = require('./resourceSelection');
-const chamberSelection = require('./chamberSelection');
-const recentBillTypeSelection = require('./recentBillTypeSelection');
-const recentBillSelection = require('./recentBillSelection');
-const congress = require('./../../congress');
+const _ = require('lodash')
+  , resourceSelection = require('./resourceSelection')
+  , chamberSelection = require('./chamberSelection')
+  , recentBillTypeSelection = require('./recentBillTypeSelection')
+  , recentBillSelection = require('./recentBillSelection')
+  , congress = require('./../../congress');
 
 function getBillsTextAndReplyMarkup({chamber = null, recentBillType = null, offset = 0} = {}) {
   if (!chamber) return Promise.resolve(chamberSelection(recentBillType));
@@ -26,9 +27,20 @@ function resolveBillsArgs(args) {
   };
 }
 
-function extend({callbackQuery$, command$, pushSendMessage, pushEditMessageText}) {
+function extend({callbackQuery$, command$, bot}) {
   const congressCommand$ = command$
-    .merge(callbackQuery$)
+    .map(data => _.assign(data, {
+      subType: data.args[0],
+      args: data.args.slice(1)
+    }))
+    .merge(callbackQuery$.map(event => {
+      const [type, subType, ...args] = event.data.split('|');
+      return _.assign(event, {
+        type,
+        subType,
+        args
+      });
+    }))
     .filter(({type}) => type === 'congress');
 
   const baseCommand$ = congressCommand$
@@ -40,21 +52,21 @@ function extend({callbackQuery$, command$, pushSendMessage, pushEditMessageText}
   baseCommand$.onValue(
     ({message}) =>
       Promise.resolve(resourceSelection())
-        .then(({text, reply_markup}) => pushSendMessage(message.chat.id, text, {reply_markup}))
+        .then(({text, reply_markup}) => bot.sendMessage(message.chat.id, text, {reply_markup}))
   );
 
-  billsCommand$.onValue(({args, message, callbackQueryId}) =>
-    getBillsTextAndReplyMarkup(resolveBillsArgs(args))
+  billsCommand$.onValue(({args, message, callback_query_id}) => {
+    return getBillsTextAndReplyMarkup(resolveBillsArgs(args))
       .then(({text, reply_markup}) =>
-        callbackQueryId
-          ? pushEditMessageText(text, {
+        callback_query_id
+          ? bot.editMessageText(text, {
             chat_id: message.chat.id,
             message_id: message.message_id,
             reply_markup
           })
-          : pushSendMessage(message.chat.id, text, {reply_markup})
-      )
-  );
+          : bot.sendMessage(message.chat.id, text, {reply_markup})
+      );
+  });
 }
 
 module.exports = {
